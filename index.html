@@ -303,7 +303,7 @@
                             <div class="w-full aspect-[4/5] rounded-2xl overflow-hidden mb-4 ring-2 ring-champagne-400/40 shadow-md">
                                 <img src="https://i.postimg.cc/3wSsk5zX/IMG-0768.jpg" alt="Groom Yoshio" class="w-full h-full object-cover object-top transition-transform hover:scale-105 duration-500">
                             </div>
-                            <span class="block font-serif text-champagne-100 text-xl font-medium" data-i18n="groom_name">内野 善夫 (Uchino Yoshio)</span>
+                            <span class="block font-serif text-champagne-100 text-xl font-medium" data-i18n="groom_name">内野 <span lang="ja" style="font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;">善</span>夫 (Uchino Yoshio)</span>
                             <span class="block text-xs text-champagne-400 font-serif mt-1 tracking-wider" data-i18n="groom_title">新郎 / Groom</span>
                         </div>
                         <div class="text-center p-5 bg-black/30 rounded-2xl border border-white/10 shadow-xs">
@@ -887,7 +887,7 @@
                 hero_subtitle: "WEDDING INVITATION",
                 hero_invite_line: "ふたりの特別な門出を、心を込めてご案内いたします",
                 hero_venue_name: "台中市役所 (Taichung Shiyakusho)",
-                groom_name: "内野 善夫（うちの よしお）",
+                groom_name: "内野 <span lang=\"ja\" style=\"font-family: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;\">善</span>夫（うちの よしお）",
                 groom_title: "新郎 / Groom",
                 bride_name: "林 韋慈（リン ウェイツー）",
                 bride_title: "新婦 / Bride",
@@ -895,8 +895,8 @@
                 unit_days: "DAYS",
                 unit_hours: "HOURS",
                 unit_mins: "MINS",
-                unit_secs: "SECS",
-                hero_rsvp_btn: "ご出欠の回覆はこちら ↓",
+                hero_secs: "SECS",
+                hero_rsvp_btn: "ご出欠のご回答はこちら ↓",
                 section_story_title: "私たちのストーリー",
                 story_subtitle: "Our Story",
                 story_title: "ふたりで歩む、これからの新しい章へ",
@@ -946,17 +946,27 @@
                 btn_submit: "回答を送信する",
                 modal_success_title: "ご回答ありがとうございます！",
                 modal_success_msg: "ご出欠情報を確認いたしました。2026年12月13日に皆様にお会いできることを心より楽しみにしております！",
-                modal_close: "閉じる"
+                modal_close: "閉じる",
+                placeholder_count: "例：1人"
             }
         };
 
         function setLanguage(lang) {
+            // 同步更新網頁底層語言標籤，確保手機與不同瀏覽器正確強制載入日文專屬漢字（解決「善」字顯示問題）
+            document.documentElement.lang = lang === 'zh' ? 'zh-TW' : 'ja';
+
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (i18nData[lang] && i18nData[lang][key]) {
                     el.innerHTML = i18nData[lang][key];
                 }
             });
+
+            // 更新人數欄位的 placeholder 預填範例
+            const countInput = document.querySelector('input[name="entry.355682583"]');
+            if (countInput) {
+                countInput.placeholder = lang === 'zh' ? '例：1位' : i18nData[lang].placeholder_count;
+            }
 
             const zhBtn = document.getElementById('lang-zh');
             const jaBtn = document.getElementById('lang-ja');
